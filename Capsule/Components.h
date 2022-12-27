@@ -30,12 +30,26 @@ using EntityMap = std::unordered_map<EntityID, EntityRef>;
 using ComponentMap = std::unordered_map<EntityID, ComponentRef>;
 using ComponentMapArray = std::array<ComponentMap, Components_MaxNum>;
 
+/*!*************************************************************************
+ * \brief
+ * Registers ID for new component
+ * \return
+ * unsigned int, ID of new component
+***************************************************************************/
 inline ComponentID GetComponentID()
 {
 	static ComponentID lastID = 0;
 	return lastID++;
 }
 
+/*!*************************************************************************
+ * \brief
+ * Registers ID for new component
+ * Static typeID initializer is called ONCE (reminder), 
+ * and is fixed per typename
+ * \return
+ * unsigned int, ID of component
+***************************************************************************/
 template <typename T>
 inline ComponentID GetComponentTypeID() noexcept
 {
@@ -43,8 +57,20 @@ inline ComponentID GetComponentTypeID() noexcept
 	return typeID;
 }
 
+/*!*************************************************************************
+ * \brief
+ * Get static ComponentMapArray declared in .cpp
+ * \return
+ * static ComponentMapArray
+***************************************************************************/
 extern ComponentMapArray GetComponentMapArray();
 
+/*!*************************************************************************
+ * \brief
+ * Get component map from static ComponentMapArray declared in .cpp
+ * \return
+ * ComponentMap
+***************************************************************************/
 template <typename T>
 inline ComponentMap Componenth_GetComponents() noexcept
 {
@@ -56,6 +82,12 @@ struct Component
 	EntityID m_EntityID;
 	Component(EntityID _id) : m_EntityID(_id) {}
 
+	/*!*************************************************************************
+	 * \brief
+	 * Get entityID attatched
+	 * \return
+	 * unsigned int entityID
+	***************************************************************************/
 	inline const EntityID GetID() const { return m_EntityID; }
 };
 
@@ -71,8 +103,20 @@ private:
 public:
 	Entity();// : m_ID(LatestID++), m_Active(false) {}
 
+	/*!*************************************************************************
+	 * \brief
+	 * "Destroys" entity, basically just emptying it out and returning it to
+	 * availableEntity pool.
+	***************************************************************************/
 	void Destroy();
 
+	/*!*************************************************************************
+	 * \brief
+	 * Template function, AddComponent<ComponentName>(args...).
+	 * Adds new component to current entity.
+	 * \return
+	 * Reference to component created
+	***************************************************************************/
 	template <typename T, typename ...Args>
 	T* AddComponent(Args&&... _args)
 	{
@@ -90,19 +134,41 @@ public:
 		return component;
 	}
 
+	/*!*************************************************************************
+	 * \brief
+	 * Template function, checks if entity contains said component
+	 * \return
+	 * True/false
+	***************************************************************************/
 	template <typename T>
 	bool HasComponent() const
 	{
 		return m_ComponentBitset[GetComponentTypeID<T>()];
 	}
 
+	/*!*************************************************************************
+	 * \brief
+	 * Get reference to component specified
+	 * \return
+	 * Reference to component
+	***************************************************************************/
 	template <typename T>
 	T* GetComponent() const
 	{
 		return (T*)m_ComponentArray[GetComponentTypeID<T>()];
 	}
 
+	/*!*************************************************************************
+	 * \brief
+	 * Get entity's ID
+	 * \return
+	 * unsigned int EntityID
+	***************************************************************************/
 	inline EntityID const GetID() const { return m_ID; }
+	/*!*************************************************************************
+	 * \brief
+	 * Set entity's active state
+	***************************************************************************/
 	inline void SetActive(bool _active) { m_Active = _active; }
 };
 

@@ -23,11 +23,37 @@ namespace System
 		static void Update(f32 _deltatime) {}
 		static void Terminate();
 
+		/*!*************************************************************************
+		 * \brief
+		 * Get entirety of entitymap
+		 * \return
+		 * EntityMap
+		***************************************************************************/
 		static EntityMap GetEntities();
+		/*!*************************************************************************
+		 * \brief
+		 * Get specific entity from entitymap
+		 * \param _id
+		 * Entity ID to be searched for.
+		 * \return
+		 * Reference to entity, null if non-existant
+		***************************************************************************/
 		static EntityRef GetEntity(EntityID& _id);
 
+		/*!*************************************************************************
+		 * \brief
+		 * "Create" new entity by pulling from pool
+		 * \return
+		 * Reference to "new" entity
+		***************************************************************************/
 		static EntityRef CreateEntity();
-		static void DestroyEntity(const EntityID& id);
+		/*!*************************************************************************
+		 * \brief
+		 * "Destroys" entity, moves it into pool
+		 * \param _id
+		 * Entity ID to be destroyed.
+		***************************************************************************/
+		static void DestroyEntity(const EntityID& _id);
 	};
 
 	class ComponentSystem

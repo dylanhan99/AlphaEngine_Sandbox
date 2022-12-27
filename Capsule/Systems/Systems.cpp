@@ -52,9 +52,9 @@ namespace System
 		return entity;
 	}
 
-	void EntitySystem::DestroyEntity(const EntityID& id)
+	void EntitySystem::DestroyEntity(const EntityID& _id)
 	{
-		auto entity = s_EntityMap.at(id);
+		auto entity = s_EntityMap.at(_id);
 		entity->Destroy();
 		s_AvailableEntities.push_back(entity);
 	}
