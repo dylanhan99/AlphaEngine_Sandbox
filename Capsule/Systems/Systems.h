@@ -31,14 +31,22 @@ namespace System
 		static void Update(f32 _deltatime) {}
 		static void Terminate();
 
+		/*!*************************************************************************
+		 * \brief
+		 * Get list of available entities
+		 * \return
+		 * Reference to available entity list
+		***************************************************************************/
 		static EntityList* GetAvailableEntities();
+
 		/*!*************************************************************************
 		 * \brief
 		 * Get entirety of entitymap
 		 * \return
-		 * EntityMap
+		 * Reference to EntityMap
 		***************************************************************************/
 		static EntityMap* GetEntities();
+
 		/*!*************************************************************************
 		 * \brief
 		 * Get specific entity from entitymap
@@ -56,6 +64,7 @@ namespace System
 		 * Reference to "new" entity
 		***************************************************************************/
 		static EntityRef CreateEntity();
+
 		/*!*************************************************************************
 		 * \brief
 		 * "Destroys" entity, moves it into pool
@@ -64,12 +73,28 @@ namespace System
 		***************************************************************************/
 		static void DestroyEntity(const EntityID& _id);
 
+		/*!*************************************************************************
+		 * \brief
+		 * Check if entity has component
+		 * \param _entity
+		 * Entity pointer used to check for component
+		 * \return
+		 * True/false flag
+		***************************************************************************/
 		template <typename T>
 		static bool HasComponent(EntityRef _entity)
 		{
 			return _entity->ComponentBitset[GetComponentTypeID<T>()];
 		}
 
+		/*!*************************************************************************
+		 * \brief
+		 * Check if entity has component
+		 * \param _id
+		 * EntityID used to check for component
+		 * \return
+		 * True/false flag
+		***************************************************************************/
 		template <typename T>
 		static bool HasComponent(EntityID& _id)
 		{
@@ -79,14 +104,31 @@ namespace System
 			return ref->ComponentBitset[GetComponentTypeID<T>()];
 		}
 
+		/*!*************************************************************************
+		 * \brief
+		 * Get component from entity
+		 * \param _entity
+		 * Entity pointer used to get component
+		 * \return
+		 * Pointer to component. Is null if non-existant
+		***************************************************************************/
 		template <typename T>
 		static T* GetComponent(EntityRef _entity)
 		{
 			return (T*)GetComponents<T>()->at(_entity->ID);
-			//return (T*)GetComponentMapArray().at(GetComponentTypeID<T>()).at(_entity->ID);
-			//ComponentArray[GetComponentTypeID<T>()];
 		}
 
+		/*!*************************************************************************
+		 * \brief
+		 * Add component to entity
+		 * \param _id
+		 * ID of entity to add component to.
+		 * \param _args
+		 * Variadic arguments, made up of variables the component's constructor
+		 * requires.
+		 * \return
+		 * Pointer to component. Nullptr if already exists.
+		***************************************************************************/
 		template <typename T, typename ...Args>
 		static T* AddComponent(EntityID& _id, Args&&... _args)
 		{

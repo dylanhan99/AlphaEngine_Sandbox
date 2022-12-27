@@ -17,13 +17,6 @@ void MovingGuyScript::Init()
 	using namespace System;
 	EntitySystem::Init();
 
-	//auto entity = EntitySystem::CreateEntity();
-	//entity->AddComponent<Position>(entity->GetID(), 1, 0);
-	//entity->AddComponent<Position>(entity->GetID(), 0, 0);
-	//entity->AddComponent<Script>(entity->GetID());
-	//entity->AddComponent<Renderable>(entity->GetID());
-	//auto positionComp = entity->GetComponent<Position>();
-
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity->ID, 1, 0);
 	EntitySystem::AddComponent<Position>(entity->ID, 0, 0);
@@ -32,6 +25,10 @@ void MovingGuyScript::Init()
 	EntitySystem::AddComponent<Renderable>(entity->ID);
 	auto positionComponent = EntitySystem::GetComponent<Position>(entity);
 	auto scriptComponent = EntitySystem::GetComponent<Script>(entity);
+
+	auto entity2 = EntitySystem::CreateEntity();
+	EntitySystem::AddComponent<Position>(entity2->ID, 69, 96);
+	auto position2 = EntitySystem::GetComponent<Position>(entity2);
 
 	m_Guy.Position = { 0, 0 };
 	m_Guy.Color = 0xFFFFFFFF;

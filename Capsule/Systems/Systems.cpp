@@ -35,16 +35,10 @@ namespace System
 		// When there is a component pool, dont forget to delete pool and component map from here.
 		// Then DestroyEntity() will jkust disable the component rather than delete it.
 
-		//for (auto it = s_EntityMap->begin(); it != s_EntityMap->end(); ++it) {
-		//	std::cout << it->first << std::endl;
-		//	EntitySystem::DestroyEntity(it->second->ID);
-		//	std::cout << it->first << std::endl;
-		//}
 		for (auto it = s_ComponentMapsArray->begin(); it != s_ComponentMapsArray->end(); ++it) {
 			for (auto it2 = (*it)->begin(); it2 != (*it)->end(); ++it2) {
 				delete it2->second;
-			}
-		}
+		}}
 		for (auto it = s_AvailableEntities->begin(); it != s_AvailableEntities->end(); ++it)
 			delete *it;
 
@@ -97,42 +91,5 @@ namespace System
 		//	return nullptr;
 		return s_EntityMap->at(_id);
 	}
-
-	/*!*************************************************************************
-	 * \brief
-	 * Creates new Entity object
-	 * \param name
-	 * Name of the game object to find.
-	 * \return
-	 * Pointer to the game object if found.
-	 * Returns nullptr if not found.
-	***************************************************************************/
-	//void ComponentSystem::AddComponent(Components& _component, EntityID& _id)
-	//{
-	//	if (_component > Components_MaxNum || _component < 0)
-	//		return;
-	//	if (ComponentSystem::GetComponents(_component).find(_id) == ComponentSystem::GetComponents(_component).end())
-	//		return;
-	//
-	//
-	//}
-
-	//template<typename T>
-	//void ComponentSystem::AddComponent(T* _component)
-	//{
-	//	s_ComponentMapsArray[GetComponentTypeID<T>()].at(_component->GetID()) = _component;
-	//}
-
-	//ComponentMap ComponentSystem::GetComponents(Components& _component)
-	//{
-	//	return s_ComponentMapsArray[_component];
-	//}
-
-	//ComponentRef const ComponentSystem::GetComponent(Components& _component, EntityID& _id)
-	//{
-	//	if (!EntitySystem::GetEntity(_id))
-	//		return nullptr;
-	//	return GetComponents(_component).at(_id);
-	//}
 
 }
