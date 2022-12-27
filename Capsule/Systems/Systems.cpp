@@ -6,7 +6,6 @@ namespace System
 {
 
 	static EntitySystem* s_EntityManager = nullptr;
-	static ComponentSystem* s_ComponentManager = nullptr;
 
 	static EntityMap* s_EntityMap = nullptr;
 	static EntityList* s_AvailableEntities = nullptr;
@@ -20,7 +19,6 @@ namespace System
 	void EntitySystem::Init()
 	{
 		s_EntityManager = new EntitySystem();
-		s_ComponentManager = new ComponentSystem();
 
 		s_EntityMap = new EntityMap();
 		s_AvailableEntities = new EntityList({ nullptr });
@@ -118,16 +116,6 @@ namespace System
 	//
 	//
 	//}
-
-	void ComponentSystem::Init()
-	{
-		s_ComponentManager = new ComponentSystem();
-	}
-
-	void ComponentSystem::Terminate()
-	{
-		delete s_ComponentManager;
-	}
 
 	//template<typename T>
 	//void ComponentSystem::AddComponent(T* _component)

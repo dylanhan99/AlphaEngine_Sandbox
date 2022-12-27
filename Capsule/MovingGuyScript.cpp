@@ -16,7 +16,6 @@ void MovingGuyScript::Init()
 {
 	using namespace System;
 	EntitySystem::Init();
-	ComponentSystem::Init();
 
 	//auto entity = EntitySystem::CreateEntity();
 	//entity->AddComponent<Position>(entity->GetID(), 1, 0);
@@ -27,7 +26,12 @@ void MovingGuyScript::Init()
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity->ID, 1, 0);
+	EntitySystem::AddComponent<Position>(entity->ID, 0, 0);
+	EntitySystem::AddComponent<Script>(entity->ID);
+	EntitySystem::AddComponent<Renderable>(entity->ID);
+	EntitySystem::AddComponent<Renderable>(entity->ID);
 	auto positionComponent = EntitySystem::GetComponent<Position>(entity);
+	auto scriptComponent = EntitySystem::GetComponent<Script>(entity);
 
 	m_Guy.Position = { 0, 0 };
 	m_Guy.Color = 0xFFFFFFFF;
@@ -72,6 +76,5 @@ void MovingGuyScript::Terminate()
 	AEGfxMeshFree(m_Guy.Mesh);
 
 	using namespace System;
-	ComponentSystem::Terminate();
 	EntitySystem::Terminate();
 }
