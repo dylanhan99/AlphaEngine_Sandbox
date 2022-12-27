@@ -36,8 +36,17 @@ namespace System
 	{
 		// When there is a component pool, dont forget to delete pool and component map from here.
 		// Then DestroyEntity() will jkust disable the component rather than delete it.
-		for (auto it = s_EntityMap->begin(); it != s_EntityMap->end(); ++it)
-			EntitySystem::DestroyEntity(it->second->ID);
+
+		//for (auto it = s_EntityMap->begin(); it != s_EntityMap->end(); ++it) {
+		//	std::cout << it->first << std::endl;
+		//	EntitySystem::DestroyEntity(it->second->ID);
+		//	std::cout << it->first << std::endl;
+		//}
+		for (auto it = s_ComponentMapsArray->begin(); it != s_ComponentMapsArray->end(); ++it) {
+			for (auto it2 = (*it)->begin(); it2 != (*it)->end(); ++it2) {
+				delete it2->second;
+			}
+		}
 		for (auto it = s_AvailableEntities->begin(); it != s_AvailableEntities->end(); ++it)
 			delete *it;
 
