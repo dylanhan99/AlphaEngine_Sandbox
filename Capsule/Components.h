@@ -73,8 +73,6 @@ public:
 
 	void Destroy();
 
-	//template<class T, class ...Args>
-	//T* AddComponent(Args&&... _args);
 	template <typename T, typename ...Args>
 	T* AddComponent(Args&&... _args)
 	{
@@ -101,7 +99,7 @@ public:
 	template <typename T>
 	T* GetComponent() const
 	{
-		return m_ComponentArray[GetComponentTypeID<T>()];
+		return (T*)m_ComponentArray[GetComponentTypeID<T>()];
 	}
 
 	inline EntityID const GetID() const { return m_ID; }
@@ -122,6 +120,7 @@ struct Renderable : public Component
 	// CreateSprite("path2file", width, height)
 	// SetMesh(AEGfxVertexList*) for user's custom mesh
 {
+	Renderable(EntityID _id) : Component(_id) {}
 	// In render system, if (texture): rendermode, tint, textureset(NULL), transparency
 	// After component added, can do renderable.Mesh = AEgfxMeshEnd or whatever
 	// Could have a functions in graphics system to handle this creation stuff
@@ -133,6 +132,7 @@ struct Renderable : public Component
 	
 struct Script : public Component
 {
+	Script(EntityID _id) : Component(_id) {}
 	// Ref to entity
 	// Can do stuff like entity.getcomponent<>
 };

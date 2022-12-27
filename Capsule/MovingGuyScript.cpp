@@ -19,9 +19,13 @@ void MovingGuyScript::Init()
 	ComponentSystem::Init();
 
 	auto entity = EntitySystem::CreateEntity();
+	entity->AddComponent<Position>(entity->GetID(), 1, 0);
 	entity->AddComponent<Position>(entity->GetID(), 0, 0);
-	entity->AddComponent<Position>(entity->GetID(), 0, 0);
+	entity->AddComponent<Script>(entity->GetID());
+	entity->AddComponent<Renderable>(entity->GetID());
 	//std::cout << entity->GetComponent<Position>()->X << std::endl;
+
+	auto positionComp = entity->GetComponent<Position>();
 
 	m_Guy.Position = { 0, 0 };
 	m_Guy.Color = 0xFFFFFFFF;
