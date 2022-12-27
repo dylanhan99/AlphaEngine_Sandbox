@@ -7,6 +7,14 @@ namespace System
 
 	constexpr u32 MAX_POOL = 1000;
 
+	extern ComponentMapArray* GetComponentMapArray();
+
+	template <typename T>
+	inline ComponentMap* GetComponents()
+	{
+		return GetComponentMapArray()->at(GetComponentTypeID<T>());
+	}
+
 	class System
 	{
 		virtual void Init() = 0;
@@ -23,13 +31,14 @@ namespace System
 		static void Update(f32 _deltatime) {}
 		static void Terminate();
 
+		static EntityList* GetAvailableEntities();
 		/*!*************************************************************************
 		 * \brief
 		 * Get entirety of entitymap
 		 * \return
 		 * EntityMap
 		***************************************************************************/
-		static EntityMap GetEntities();
+		static EntityMap* GetEntities();
 		/*!*************************************************************************
 		 * \brief
 		 * Get specific entity from entitymap
@@ -54,6 +63,48 @@ namespace System
 		 * Entity ID to be destroyed.
 		***************************************************************************/
 		static void DestroyEntity(const EntityID& _id);
+
+		template <typename T>
+		static bool HasComponent(EntityRef _entity)
+		{
+			return _entity->ComponentBitset[GetComponentTypeID<T>()];
+		}
+
+		template <typename T>
+		static bool HasComponent(EntityID& _id)
+		{
+			EntityRef ref = GetEntity(_id);
+			if (!ref)
+				return false;
+			return ref->ComponentBitset[GetComponentTypeID<T>()];
+		}
+
+		template <typename T>
+		static T* GetComponent(EntityRef _entity)
+		{
+			return (T*)GetComponents<T>()->at(_entity->ID);
+			//return (T*)GetComponentMapArray().at(GetComponentTypeID<T>()).at(_entity->ID);
+			//ComponentArray[GetComponentTypeID<T>()];
+		}
+
+		template <typename T, typename ...Args>
+		static T* AddComponent(EntityID& _id, Args&&... _args)
+		{
+			auto entity = GetEntity(_id);
+			if (HasComponent<T>(entity)) {
+				std::cout << "Component already exists" << std::endl;
+				return nullptr;
+			}
+
+			T* component(new T(_id, std::forward<Args>(_args)...));
+			entity->ComponentList[GetComponentTypeID<T>()] = component;
+			entity->ComponentBitset[GetComponentTypeID<T>()] = true;
+			//auto comps = GetComponents<T>();
+			//comps->emplace(std::make_pair(component->m_EntityID, component));
+			GetComponents<T>()->emplace(std::make_pair(component->m_EntityID, component));
+
+			return component;
+		}
 	};
 
 	class ComponentSystem
