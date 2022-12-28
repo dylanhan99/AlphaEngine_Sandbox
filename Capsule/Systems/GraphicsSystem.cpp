@@ -21,8 +21,8 @@ namespace System
 	{
 		for (auto it = s_RenderableComponents->begin(); it != s_RenderableComponents->end(); ++it) {
 			auto positionIterator = s_PositionComponents->find(it->second->m_EntityID);
-			//if (positionIterator == s_RenderableComponents->end())
-			//	continue;
+			if (positionIterator == s_PositionComponents->end())
+				continue;
 			auto renderable = (Renderable*)it->second;
 			auto position = (Position*)positionIterator->second;
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
