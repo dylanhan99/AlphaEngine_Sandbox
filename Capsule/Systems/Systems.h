@@ -121,6 +121,33 @@ namespace System
 		/*!*************************************************************************
 		 * \brief
 		 * Add component to entity
+		 * \param _entity
+		 * Pointer to entity for component to be added to
+		 * \param _args
+		 * Variadic arguments, made up of variables the component's constructor
+		 * requires.
+		 * \return
+		 * Pointer to component. Nullptr if already exists.
+		***************************************************************************/
+		template <typename T, typename ...Args>
+		static T* AddComponent(EntityRef _entity, Args&&... _args)
+		{
+			if (HasComponent<T>(_entity)) {
+				std::cout << "Component already exists" << std::endl;
+				return nullptr;
+			}
+
+			T* component(new T(_entity->ID, std::forward<Args>(_args)...));
+			_entity->ComponentList[GetComponentTypeID<T>()] = component;
+			_entity->ComponentBitset[GetComponentTypeID<T>()] = true;
+			GetComponents<T>()->emplace(std::make_pair(component->m_EntityID, component));
+
+			return component;
+		}
+
+		/*!*************************************************************************
+		 * \brief
+		 * Add component to entity
 		 * \param _id
 		 * ID of entity to add component to.
 		 * \param _args
@@ -133,19 +160,11 @@ namespace System
 		static T* AddComponent(EntityID& _id, Args&&... _args)
 		{
 			auto entity = GetEntity(_id);
-			if (HasComponent<T>(entity)) {
-				std::cout << "Component already exists" << std::endl;
+			if (!entity) {
+				std::cout << "Entity does not exist" << std::endl;
 				return nullptr;
 			}
-
-			T* component(new T(_id, std::forward<Args>(_args)...));
-			entity->ComponentList[GetComponentTypeID<T>()] = component;
-			entity->ComponentBitset[GetComponentTypeID<T>()] = true;
-			//auto comps = GetComponents<T>();
-			//comps->emplace(std::make_pair(component->m_EntityID, component));
-			GetComponents<T>()->emplace(std::make_pair(component->m_EntityID, component));
-
-			return component;
+			return AddComponent<T>(entity, std::forward<Args>(_args)...);
 		}
 	};
 

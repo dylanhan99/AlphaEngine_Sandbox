@@ -45,12 +45,6 @@ namespace System
 		delete s_EntityManager;
 	}
 
-	/*!*************************************************************************
-	 * \brief
-	 * Creates new Entity object
-	 * \return
-	 * Pointer to the Entity object created.
-	***************************************************************************/
 	EntityRef EntitySystem::CreateEntity()
 	{
 		EntityRef entity = nullptr;
