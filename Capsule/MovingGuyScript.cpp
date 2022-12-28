@@ -1,7 +1,8 @@
 #include "MovingGuyScript.h"
 #include <iostream>
-#include "Systems/Systems.h"
-#include "Components.h"
+//#include "Systems/Systems.h"
+//#include "Components.h"
+#include "Systems/GraphicsSystem.h"
 
 struct Guy {
 	AEVec2 Position;
@@ -12,66 +13,57 @@ struct Guy {
 
 static Guy m_Guy = Guy();
 
+static Position* s_PositionComponent = NULL;
+
 void MovingGuyScript::Init()
 {
 	using namespace System;
 	EntitySystem::Init();
+	GraphicsSystem::Init();
 
 	auto entity = EntitySystem::CreateEntity();
-	EntitySystem::AddComponent<Position>(entity->ID, 1, 0);
-	EntitySystem::AddComponent<Position>(entity->ID, 0, 0);
-	EntitySystem::AddComponent<Script>(entity->ID);
-	EntitySystem::AddComponent<Renderable>(entity->ID);
-	EntitySystem::AddComponent<Renderable>(entity->ID);
-	auto positionComponent = EntitySystem::GetComponent<Position>(entity);
-	auto scriptComponent = EntitySystem::GetComponent<Script>(entity);
+	EntitySystem::AddComponent<Position>(entity, 1, 0);
+	EntitySystem::AddComponent<Position>(entity, 0, 0);
+	EntitySystem::AddComponent<Script>(entity);
+	EntitySystem::AddComponent<Renderable>(entity);
+	EntitySystem::AddComponent<Renderable>(entity);
+	s_PositionComponent = EntitySystem::GetComponent<Position>(entity);
 
 	auto entity2 = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity2->ID, 69, 96);
 	auto position2 = EntitySystem::GetComponent<Position>(entity2);
 
-	m_Guy.Position = { 0, 0 };
-	m_Guy.Color = 0xFFFFFFFF;
-	
-	AEGfxMeshStart();
-	AEGfxTriAdd(
-		0.f, m_Guy.Size, 0xFFFF0000, 0.0f, 0.0f,
-		-m_Guy.Size, -m_Guy.Size, 0xFFFF0000, 0.0f, 0.0f,
-		m_Guy.Size, -m_Guy.Size, 0xFFFF0000, 0.0f, 0.0f
-	);
-	m_Guy.Mesh = AEGfxMeshEnd();
+	EntitySystem::GetComponent<Renderable>(entity)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
 }
 
 void MovingGuyScript::Update()
 {
+
 	f32 amt = 10;
 	if (AEInputCheckTriggered(AEVK_W)) {
-		m_Guy.Position.y += amt;
+		s_PositionComponent->Y += amt;
 	}
 	if (AEInputCheckTriggered(AEVK_S)) {
-		m_Guy.Position.y -= amt;
+		s_PositionComponent->Y -= amt;
 	}
 
-	//s32 x, y;
-	//AEInputGetCursorPosition(&x, &y);
-	//m_Guy.Position.x = x;
-	//m_Guy.Position.y = y;
+	System::GraphicsSystem::Update(1.f);
 }
 
 void MovingGuyScript::Draw()
 {
 	//std::cout << "Guy pos: " << m_Guy.Position.x << " - " << m_Guy.Position.y << std::endl;
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-	AEGfxSetPosition(m_Guy.Position.x, m_Guy.Position.y);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxMeshDraw(m_Guy.Mesh, AE_GFX_MDM_TRIANGLES);
+	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	//AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//AEGfxSetPosition(m_Guy.Position.x, m_Guy.Position.y);
+	//AEGfxTextureSet(NULL, 0, 0);
+	//AEGfxMeshDraw(m_Guy.Mesh, AE_GFX_MDM_TRIANGLES);
+	System::GraphicsSystem::Draw();
 }
 
 void MovingGuyScript::Terminate()
 {
-	AEGfxMeshFree(m_Guy.Mesh);
-
 	using namespace System;
+	GraphicsSystem::Terminate();
 	EntitySystem::Terminate();
 }

@@ -7,3 +7,8 @@ Entity::Entity()
 {
 
 }
+
+Renderable::~Renderable() 
+{ 
+	AEGfxMeshFree(Mesh); 
+}

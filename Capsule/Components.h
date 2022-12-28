@@ -82,13 +82,14 @@ struct Position : public Component
 	Position(EntityID _id, f32 _x, f32 _y) : Component(_id), X(_x), Y(_y) {}
 };
 
+// Renderable could be a Mesh or Sprite.
+// CreateMesh(width, height) to create a quad
+// CreateSprite("path2file", width, height)
+// SetMesh(AEGfxVertexList*) for user's custom mesh
 struct Renderable : public Component
-	// Renderable could be a Mesh or Sprite.
-	// CreateMesh(width, height) to create a quad
-	// CreateSprite("path2file", width, height)
-	// SetMesh(AEGfxVertexList*) for user's custom mesh
 {
 	Renderable(EntityID _id) : Component(_id) {}
+	~Renderable();
 	// In render system, if (texture): rendermode, tint, textureset(NULL), transparency
 	// After component added, can do renderable.Mesh = AEgfxMeshEnd or whatever
 	// Could have a functions in graphics system to handle this creation stuff

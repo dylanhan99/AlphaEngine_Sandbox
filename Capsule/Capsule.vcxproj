@@ -14,11 +14,13 @@
     <ClCompile Include="Components.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovingGuyScript.cpp" />
+    <ClCompile Include="Systems\GraphicsSystem.cpp" />
     <ClCompile Include="Systems\Systems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
     <ClInclude Include="MovingGuyScript.h" />
+    <ClInclude Include="Systems\GraphicsSystem.h" />
     <ClInclude Include="Systems\Systems.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
