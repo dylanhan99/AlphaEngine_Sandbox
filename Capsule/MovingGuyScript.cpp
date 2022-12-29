@@ -24,7 +24,7 @@ void MovingGuyScript::Init()
 	auto entity2 = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity2->ID, 100, 96);
 	EntitySystem::AddComponent<Renderable>(entity2);
-	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
+	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(200);
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);

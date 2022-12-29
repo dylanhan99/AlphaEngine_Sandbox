@@ -72,6 +72,36 @@ namespace System
 		return _component;
 	}
 
+#define SEGMENTS 20
+	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(float _diameter)
+	{
+		f32 pi = 3.14159f;
+		f32 rad = _diameter * 0.5f;
+
+		AEVec2 points[SEGMENTS] = { 0 };
+
+		AEGfxVertexList* mesh = nullptr;
+		AEGfxMeshStart();
+
+		for (auto i = 0; i < SEGMENTS; ++i) {
+			float angle = 2.0f * pi * i / SEGMENTS;
+			//vertices[i + 1] = new Vector2(RADIUS * Mathf.Cos(angle), RADIUS * Mathf.Sin(angle));
+			points[i].x = rad * AECos(angle);
+			points[i].y = rad * AESin(angle);
+		}
+
+		for (auto i = 0; i < SEGMENTS; ++i) {
+			u32 next = (i + 1) % SEGMENTS;
+			AEGfxTriAdd(
+				0.f,			0.f,			0xFFFFFFFF, 0.0f, 1.0f,
+				points[i].x,	points[i].y,	0xFFFFFFFF, 1.0f, 1.0f,
+				points[next].x, points[next].y, 0xFFFFFFFF, 0.0f, 0.0f);
+		}
+
+		mesh = AEGfxMeshEnd();
+		return mesh;
+	}
+
 	AEGfxTexture* GraphicsSystem::CreateTexture(const char* _path)
 	{
 		AEGfxTexture* texture = AEGfxTextureLoad(_path);

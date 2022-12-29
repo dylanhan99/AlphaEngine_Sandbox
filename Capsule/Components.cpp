@@ -10,5 +10,8 @@ Entity::Entity()
 
 Renderable::~Renderable() 
 { 
-	AEGfxMeshFree(Mesh); 
+	if (Mesh)
+		AEGfxMeshFree(Mesh); 
+	if (Texture)
+		AEGfxTextureUnload(Texture);
 }

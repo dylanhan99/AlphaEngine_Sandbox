@@ -44,6 +44,8 @@ namespace System
 		***************************************************************************/
 		static Renderable* SetQuadMesh(Renderable* _component, float _width, float _height);
 
+		static AEGfxVertexList* CreateCircleMesh(float _diameter);
+
 		/*!*************************************************************************
 		 * \brief
 		 * Creates a texture.
