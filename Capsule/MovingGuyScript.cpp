@@ -23,17 +23,16 @@ void MovingGuyScript::Init()
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);
-	EntitySystem::AddComponent<Position>(entity, 0, 0);
 	EntitySystem::AddComponent<Script>(entity);
-	EntitySystem::AddComponent<Renderable>(entity);
-	EntitySystem::AddComponent<Renderable>(entity);
+	auto rend = EntitySystem::AddComponent<Renderable>(entity);
 	s_PositionComponent = EntitySystem::GetComponent<Position>(entity);
+	GraphicsSystem::SetTexture(rend, "Assets/PlanetTexture.png", 100, 100);
 
 	auto entity2 = EntitySystem::CreateEntity();
-	EntitySystem::AddComponent<Position>(entity2->ID, 69, 96);
-	auto position2 = EntitySystem::GetComponent<Position>(entity2);
-
-	EntitySystem::GetComponent<Renderable>(entity)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
+	EntitySystem::AddComponent<Position>(entity2->ID, 100, 96);
+	EntitySystem::AddComponent<Renderable>(entity2);
+	
+	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
 }
 
 void MovingGuyScript::Update()

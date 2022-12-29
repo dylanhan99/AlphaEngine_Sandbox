@@ -98,7 +98,7 @@ struct Renderable : public Component
 	AEGfxTexture* Texture = nullptr;
 	u32 Color;
 };
-	
+
 struct Script : public Component
 {
 	Script(EntityID _id) : Component(_id) {}

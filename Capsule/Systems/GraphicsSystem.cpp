@@ -25,11 +25,16 @@ namespace System
 				continue;
 			auto renderable = (Renderable*)it->second;
 			auto position = (Position*)positionIterator->second;
-			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-			AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-			AEGfxSetPosition(position->X, position->Y);
-			AEGfxTextureSet(NULL, 0, 0);
-			AEGfxMeshDraw(renderable->Mesh, AE_GFX_MDM_TRIANGLES);
+			if (renderable->Mesh) {
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				if (renderable->Texture)
+					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+				AEGfxSetPosition(position->X, position->Y);
+				AEGfxTextureSet(renderable->Texture, 0, 0);
+				AEGfxSetTransparency(1.0f);
+				AEGfxMeshDraw(renderable->Mesh, AE_GFX_MDM_TRIANGLES);
+			}
 		}
 	}
 
@@ -43,18 +48,46 @@ namespace System
 	{
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
+
 		AEGfxTriAdd(
-			0.f,	0.f,	  0xFFFF0000, 0.0f, 0.0f,
-			0.f,	-_height, 0xFFFF0000, 0.0f, 0.0f,
-			_width, -_height, 0xFFFF0000, 0.0f, 0.0f
-		);
+			-_width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			 _width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			-_width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
 		AEGfxTriAdd(
-			_width, -_height, 0xFFFF0000, 0.0f, 0.0f,
-			_width, 0.f,	  0xFFFF0000, 0.0f, 0.0f,
-			0.f,	0.f,	  0xFFFF0000, 0.0f, 0.0f
-		);
+			 _width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			 _width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-_width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
 		mesh = AEGfxMeshEnd();
 		return mesh;
+	}
+
+	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, float _width, float _height)
+	{
+		if (!_component)
+			return nullptr;
+		_component->Mesh = CreateQuadMesh(_width, _height);
+		return _component;
+	}
+
+	AEGfxTexture* GraphicsSystem::CreateTexture(const char* _path)
+	{
+		AEGfxTexture* texture = AEGfxTextureLoad(_path);
+		if (!texture)
+			return nullptr; // could load texture as a "failed texture png" instead?
+		return texture;
+	}
+
+	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, float _width, float _height)
+	{
+		if (!_component)
+			return nullptr;
+		_component->Texture = CreateTexture(_path);
+		_component->Mesh = CreateQuadMesh(_width, _height);
+		//if (!_component->Texture || !_component->Mesh)
+		//	return nullptr;
+		return _component;
 	}
 
 }
