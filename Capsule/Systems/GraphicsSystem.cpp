@@ -26,6 +26,7 @@ namespace System
 			auto renderable = (Renderable*)it->second;
 			auto position = (Position*)positionIterator->second;
 			if (renderable->Mesh) {
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 				if (renderable->Texture)
 					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

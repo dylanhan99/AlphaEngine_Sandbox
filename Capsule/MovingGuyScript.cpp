@@ -21,18 +21,17 @@ void MovingGuyScript::Init()
 	EntitySystem::Init();
 	GraphicsSystem::Init();
 
+	auto entity2 = EntitySystem::CreateEntity();
+	EntitySystem::AddComponent<Position>(entity2->ID, 100, 96);
+	EntitySystem::AddComponent<Renderable>(entity2);
+	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
+
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);
 	EntitySystem::AddComponent<Script>(entity);
 	auto rend = EntitySystem::AddComponent<Renderable>(entity);
 	s_PositionComponent = EntitySystem::GetComponent<Position>(entity);
 	GraphicsSystem::SetTexture(rend, "Assets/PlanetTexture.png", 100, 100);
-
-	auto entity2 = EntitySystem::CreateEntity();
-	EntitySystem::AddComponent<Position>(entity2->ID, 100, 96);
-	EntitySystem::AddComponent<Renderable>(entity2);
-	
-	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateQuadMesh(100, 200);
 }
 
 void MovingGuyScript::Update()
@@ -44,6 +43,13 @@ void MovingGuyScript::Update()
 	}
 	if (AEInputCheckTriggered(AEVK_S)) {
 		s_PositionComponent->Y -= amt;
+	}
+
+	if (AEInputCheckTriggered(AEVK_A)) {
+		s_PositionComponent->X -= amt;
+	}
+	if (AEInputCheckTriggered(AEVK_D)) {
+		s_PositionComponent->X += amt;
 	}
 
 	System::GraphicsSystem::Update(1.f);
