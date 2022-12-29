@@ -13,6 +13,9 @@ struct Guy {
 
 static Guy m_Guy = Guy();
 
+static EntityRef s_Entity2 = NULL;
+static Renderable* s_Entity2Rend = NULL;
+
 static Position* s_PositionComponent = NULL;
 
 void MovingGuyScript::Init()
@@ -21,10 +24,12 @@ void MovingGuyScript::Init()
 	EntitySystem::Init();
 	GraphicsSystem::Init();
 
-	auto entity2 = EntitySystem::CreateEntity();
-	EntitySystem::AddComponent<Position>(entity2->ID, 0, 0);
-	EntitySystem::AddComponent<Renderable>(entity2);
-	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
+	s_Entity2 = EntitySystem::CreateEntity();
+	EntitySystem::AddComponent<Position>(s_Entity2->ID, 0, 0);
+	EntitySystem::AddComponent<Renderable>(s_Entity2);
+	//EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
+	s_Entity2Rend = EntitySystem::GetComponent<Renderable>(s_Entity2);
+	s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(3, 600);
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);
@@ -36,6 +41,8 @@ void MovingGuyScript::Init()
 
 void MovingGuyScript::Update()
 {
+	static u32 segments = 3;
+	using namespace System;
 
 	f32 amt = 10;
 	if (AEInputCheckTriggered(AEVK_W)) {
@@ -52,7 +59,23 @@ void MovingGuyScript::Update()
 		s_PositionComponent->X += amt;
 	}
 
-	System::GraphicsSystem::Update(1.f);
+	if (AEInputCheckTriggered(AEVK_UP)) {
+		++segments;
+		AEGfxMeshFree(s_Entity2Rend->Mesh);
+		s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(segments, 600);
+	}
+	if (AEInputCheckTriggered(AEVK_DOWN)) {
+		--segments;
+		AEGfxMeshFree(s_Entity2Rend->Mesh);
+		s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(segments, 600);
+	}
+
+	if (AEInputCheckTriggered(AEVK_SPACE)) {
+		AEGfxMeshFree(s_Entity2Rend->Mesh);
+		GraphicsSystem::SetCircleMesh(s_Entity2Rend, 300);
+	}
+
+	GraphicsSystem::Update(1.f);
 }
 
 void MovingGuyScript::Draw()

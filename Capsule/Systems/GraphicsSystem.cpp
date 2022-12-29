@@ -45,7 +45,7 @@ namespace System
 		s_RenderableComponents = nullptr;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(float _width, float _height)
+	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height)
 	{
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
@@ -64,7 +64,7 @@ namespace System
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, float _width, float _height)
+	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height)
 	{
 		if (!_component)
 			return nullptr;
@@ -73,32 +73,54 @@ namespace System
 	}
 
 #define SEGMENTS 36
-	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(float _diameter)
+	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(f32 _diameter)
 	{
-		f32 pi = 3.14159f;
+		return CreatePolygonMesh(SEGMENTS, _diameter);
+	}
+
+	Renderable* GraphicsSystem::SetCircleMesh(Renderable* _component, f32 _diameter)
+	{
+		if (!_component)
+			return nullptr;
+		_component->Mesh = CreateCircleMesh(_diameter);
+		return _component;
+	}
+
+#define PI 3.141592654f
+	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter)
+	{
 		f32 rad = _diameter * 0.5f;
 
-		AEVec2 points[SEGMENTS] = { 0 };
+		std::vector<AEVec2> points;
 
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
 
-		for (auto i = 0; i < SEGMENTS; ++i) {
-			float angle = 2.0f * pi * i / SEGMENTS;
-			points[i].x = rad * AECos(angle);
-			points[i].y = rad * AESin(angle);
+		for (auto i = 0; i < _segments; ++i) {
+			f32 angle = 2.0f * PI * i / _segments + PI * 0.5f;
+			points.push_back({ rad * AECos(angle) , rad * AESin(angle) });
+			//points[i].x = rad * AECos(angle);
+			//points[i].y = rad * AESin(angle);
 		}
 
-		for (auto i = 0; i < SEGMENTS; ++i) {
-			u32 next = (i + 1) % SEGMENTS;
+		for (auto i = 0; i < _segments; ++i) {
+			u32 next = (i + 1) % _segments;
 			AEGfxTriAdd(
-				0.f,			0.f,			0xFFFFFFFF, 0.0f, 1.0f,
-				points[i].x,	points[i].y,	0xFFFFFFFF, 1.0f, 1.0f,
+				0.f, 0.f, 0xFFFFFFFF, 0.0f, 1.0f,
+				points[i].x, points[i].y, 0xFFFFFFFF, 1.0f, 1.0f,
 				points[next].x, points[next].y, 0xFFFFFFFF, 0.0f, 0.0f);
 		}
 
 		mesh = AEGfxMeshEnd();
 		return mesh;
+	}
+
+	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter)
+	{
+		if (!_component)
+			return nullptr;
+		_component->Mesh = CreatePolygonMesh(_segments, _diameter);
+		return _component;
 	}
 
 	AEGfxTexture* GraphicsSystem::CreateTexture(const char* _path)
@@ -109,7 +131,7 @@ namespace System
 		return texture;
 	}
 
-	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, float _width, float _height)
+	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height)
 	{
 		if (!_component)
 			return nullptr;

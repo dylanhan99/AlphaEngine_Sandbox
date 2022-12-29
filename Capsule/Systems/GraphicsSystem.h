@@ -26,7 +26,7 @@ namespace System
 		 * Pointer to new AEGfxVertexList. 
 		 * Typically assigned to RenderableComponent->Mesh.
 		***************************************************************************/
-		static AEGfxVertexList* CreateQuadMesh(float _width, float _height);
+		static AEGfxVertexList* CreateQuadMesh(f32 _width, f32 _height);
 		
 		/*!*************************************************************************
 		 * \brief
@@ -42,9 +42,34 @@ namespace System
 		 * Pointer to component provided.
 		 * Nullptr if invalid component.
 		***************************************************************************/
-		static Renderable* SetQuadMesh(Renderable* _component, float _width, float _height);
+		static Renderable* SetQuadMesh(Renderable* _component, f32 _width, f32 _height);
+		
+		/*!*************************************************************************
+		 * \brief
+		 * Creates a circle mesh.
+		 * \param _diameter
+		 * Diameter of mesh in pixels.
+		 * \return
+		 * Pointer to new AEGfxVertexList.
+		 * Typically assigned to RenderableComponent->Mesh.
+		***************************************************************************/
+		static AEGfxVertexList* CreateCircleMesh(f32 _diameter);
 
-		static AEGfxVertexList* CreateCircleMesh(float _diameter);
+		/*!*************************************************************************
+		 * \brief
+		 * Creates and assigns a circle mesh.
+		 * \param _component
+		 * Pointer to Renderable component
+		 * \param _diameter
+		 * Diameter of mesh in pixels.
+		 * \return
+		 * Pointer to component provided.
+		 * Nullptr if invalid component.
+		***************************************************************************/
+		static Renderable* SetCircleMesh(Renderable* _component, f32 _diameter);
+
+		static AEGfxVertexList* CreatePolygonMesh(u32 _segments, f32 _diameter);
+		static Renderable* SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter);
 
 		/*!*************************************************************************
 		 * \brief
@@ -72,7 +97,7 @@ namespace System
 		 * Pointer to component provided.
 		 * Nullptr if invalid component or failed texture.
 		***************************************************************************/
-		static Renderable* SetTexture(Renderable* _component, const char* _path, float _width, float _height);
+		static Renderable* SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height);
 	};
 
 }
