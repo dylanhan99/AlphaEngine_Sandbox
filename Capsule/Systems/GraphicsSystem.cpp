@@ -72,7 +72,7 @@ namespace System
 		return _component;
 	}
 
-#define SEGMENTS 20
+#define SEGMENTS 36
 	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(float _diameter)
 	{
 		f32 pi = 3.14159f;
@@ -85,7 +85,6 @@ namespace System
 
 		for (auto i = 0; i < SEGMENTS; ++i) {
 			float angle = 2.0f * pi * i / SEGMENTS;
-			//vertices[i + 1] = new Vector2(RADIUS * Mathf.Cos(angle), RADIUS * Mathf.Sin(angle));
 			points[i].x = rad * AECos(angle);
 			points[i].y = rad * AESin(angle);
 		}

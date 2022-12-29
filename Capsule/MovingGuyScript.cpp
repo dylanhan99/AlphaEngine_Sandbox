@@ -22,9 +22,9 @@ void MovingGuyScript::Init()
 	GraphicsSystem::Init();
 
 	auto entity2 = EntitySystem::CreateEntity();
-	EntitySystem::AddComponent<Position>(entity2->ID, 100, 96);
+	EntitySystem::AddComponent<Position>(entity2->ID, 0, 0);
 	EntitySystem::AddComponent<Renderable>(entity2);
-	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(200);
+	EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);
