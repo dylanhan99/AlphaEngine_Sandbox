@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <iostream>
 
+#include "Constants.h"
+
 // Change to u64 if more than 8 components
 //constexpr u32 BITSET_POSITION	= 0x00000001;
 //constexpr u32 BITSET_RENDERABLE = 0x00000010;
@@ -82,6 +84,21 @@ struct Position : public Component
 	Position(EntityID _id, f32 _x, f32 _y) : Component(_id), X(_x), Y(_y) {}
 };
 
+/*!*************************************************************************
+ * \brief
+ * Creates and assigns a texture to component.
+ * \param _component
+ * Pointer to Renderable component
+ * \param _path
+ * Path to texture
+ * \param _width
+ * Width of mesh in pixels.
+ * \param _height
+ * Height of mesh in pixels.
+ * \return
+ * Pointer to component provided.
+ * Nullptr if invalid component or failed texture.
+***************************************************************************/
 struct Renderable : public Component
 {
 	Renderable(EntityID _id) : Component(_id) {}
@@ -92,7 +109,6 @@ struct Renderable : public Component
 	// eg. 
 	AEGfxVertexList* Mesh = nullptr; 
 	AEGfxTexture* Texture = nullptr;
-	u32 Color;
 	AEGfxMeshDrawMode DrawMode = AE_GFX_MDM_TRIANGLES;
 };
 

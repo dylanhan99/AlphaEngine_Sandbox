@@ -29,7 +29,7 @@ void MovingGuyScript::Init()
 	EntitySystem::AddComponent<Renderable>(s_Entity2);
 	//EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
 	s_Entity2Rend = EntitySystem::GetComponent<Renderable>(s_Entity2);
-	s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(3, 600);
+	s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(3, 600, 0xFF32AAAA);
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);

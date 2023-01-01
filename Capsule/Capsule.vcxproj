@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="MovingGuyScript.h" />
     <ClInclude Include="Systems\GraphicsSystem.h" />
     <ClInclude Include="Systems\Systems.h" />

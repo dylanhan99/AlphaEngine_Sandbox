@@ -2,8 +2,6 @@
 
 namespace System
 {
-	constexpr u32 DEFAULT_COLOR = 0xFFFFFFFF; // White
-	constexpr u32 DEFAULT_SEGMENTS = 37; // Looks smooth even when enlarged without too many triangles
 
 	static ComponentMap* s_PositionComponents = nullptr;
 	static ComponentMap* s_RenderableComponents = nullptr;
@@ -36,7 +34,7 @@ namespace System
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 				if (renderable->Texture)
 					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.4f);
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 				AEGfxSetPosition(position->X, position->Y);
 				AEGfxTextureSet(renderable->Texture, 0, 0);
 				AEGfxSetTransparency(1.0f);
@@ -52,47 +50,47 @@ namespace System
 		AEGfxTextureUnload(s_DefaultTexture);
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height)
+	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height, u32 _color)
 	{
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
-			-_width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			 _width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			-_width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+			-_width * 0.5f, -_height * 0.5f, _color, 0.0f, 1.0f,
+			 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
+			-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
 
 		AEGfxTriAdd(
-			 _width * 0.5f, -_height * 0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			 _width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			-_width * 0.5f,  _height * 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+			 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
+			 _width * 0.5f,  _height * 0.5f, _color, 1.0f, 0.0f,
+			-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
 
 		mesh = AEGfxMeshEnd();
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height)
+	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color)
 	{
 		if (!_component)
 			return nullptr;
-		_component->Mesh = CreateQuadMesh(_width, _height);
+		_component->Mesh = CreateQuadMesh(_width, _height, _color);
 		return _component;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(f32 _diameter)
+	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(f32 _diameter, u32 _color)
 	{
-		return CreatePolygonMesh(DEFAULT_SEGMENTS, _diameter);
+		return CreatePolygonMesh(DEFAULT_SEGMENTS, _diameter, _color);
 	}
 
-	Renderable* GraphicsSystem::SetCircleMesh(Renderable* _component, f32 _diameter)
+	Renderable* GraphicsSystem::SetCircleMesh(Renderable* _component, f32 _diameter, u32 _color)
 	{
 		if (!_component)
 			return nullptr;
-		_component->Mesh = CreateCircleMesh(_diameter);
+		_component->Mesh = CreateCircleMesh(_diameter, _color);
 		return _component;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter)
+	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color)
 	{
 		f32 rad = _diameter * 0.5f;
 
@@ -111,20 +109,20 @@ namespace System
 		for (auto i = 0; i < _segments; ++i) {
 			u32 next = (i + 1) % _segments;
 			AEGfxTriAdd(
-				0.f, 0.f, 0xFFFFFFFF, 0.0f, 1.0f,
-				points[i].x, points[i].y, 0xFFFFFFFF, 1.0f, 1.0f,
-				points[next].x, points[next].y, 0xFFFFFFFF, 0.0f, 0.0f);
+				0.f, 0.f, _color, 0.0f, 1.0f,
+				points[i].x, points[i].y, _color, 1.0f, 1.0f,
+				points[next].x, points[next].y, _color, 0.0f, 0.0f);
 		}
 
 		mesh = AEGfxMeshEnd();
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter)
+	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color)
 	{
 		if (!_component)
 			return nullptr;
-		_component->Mesh = CreatePolygonMesh(_segments, _diameter);
+		_component->Mesh = CreatePolygonMesh(_segments, _diameter, _color);
 		return _component;
 	}
 
