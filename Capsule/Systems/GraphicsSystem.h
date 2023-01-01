@@ -98,6 +98,8 @@ namespace System
 		 * Nullptr if invalid component or failed texture.
 		***************************************************************************/
 		static Renderable* SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height);
+	
+		static Renderable* SetDrawMode(Renderable* _component, AEGfxMeshDrawMode _drawmode);
 	};
 
 }

@@ -36,11 +36,11 @@ namespace System
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 				if (renderable->Texture)
 					AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+				AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 0.4f);
 				AEGfxSetPosition(position->X, position->Y);
 				AEGfxTextureSet(renderable->Texture, 0, 0);
 				AEGfxSetTransparency(1.0f);
-				AEGfxMeshDraw(renderable->Mesh, AE_GFX_MDM_TRIANGLES);
+				AEGfxMeshDraw(renderable->Mesh, renderable->DrawMode);
 			}
 		}
 	}
@@ -145,6 +145,13 @@ namespace System
 		//if (!_component->Texture || !_component->Mesh)
 		//	return nullptr;
 		return _component;
+	}
+
+	Renderable* GraphicsSystem::SetDrawMode(Renderable* _component, AEGfxMeshDrawMode _drawmode)
+	{
+		if (!_component)
+			return nullptr;
+		_component->DrawMode = _drawmode;
 	}
 
 }

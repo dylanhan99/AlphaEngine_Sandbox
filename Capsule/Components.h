@@ -82,10 +82,6 @@ struct Position : public Component
 	Position(EntityID _id, f32 _x, f32 _y) : Component(_id), X(_x), Y(_y) {}
 };
 
-// Renderable could be a Mesh or Sprite.
-// CreateMesh(width, height) to create a quad
-// CreateSprite("path2file", width, height)
-// SetMesh(AEGfxVertexList*) for user's custom mesh
 struct Renderable : public Component
 {
 	Renderable(EntityID _id) : Component(_id) {}
@@ -97,6 +93,7 @@ struct Renderable : public Component
 	AEGfxVertexList* Mesh = nullptr; 
 	AEGfxTexture* Texture = nullptr;
 	u32 Color;
+	AEGfxMeshDrawMode DrawMode = AE_GFX_MDM_TRIANGLES;
 };
 
 struct Script : public Component
