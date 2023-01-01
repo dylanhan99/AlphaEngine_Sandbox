@@ -15,6 +15,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovingGuyScript.cpp" />
     <ClCompile Include="Systems\GraphicsSystem.cpp" />
+    <ClCompile Include="Systems\ParticleSystem.cpp" />
     <ClCompile Include="Systems\Systems.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -22,6 +23,8 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="MovingGuyScript.h" />
     <ClInclude Include="Systems\GraphicsSystem.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Systems\ParticleSystem.h" />
     <ClInclude Include="Systems\Systems.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

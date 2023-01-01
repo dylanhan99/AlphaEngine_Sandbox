@@ -3,6 +3,7 @@
 //#include "Systems/Systems.h"
 //#include "Components.h"
 #include "Systems/GraphicsSystem.h"
+#include "Systems/ParticleSystem.h"
 
 struct Guy {
 	AEVec2 Position;
@@ -23,6 +24,7 @@ void MovingGuyScript::Init()
 	using namespace System;
 	EntitySystem::Init();
 	GraphicsSystem::Init();
+	ParticleSystem::Init();
 
 	s_Entity2 = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(s_Entity2->ID, 0, 0);
@@ -81,7 +83,12 @@ void MovingGuyScript::Update()
 		GraphicsSystem::SetCircleMesh(s_Entity2Rend, 300);
 	}
 
+	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		ParticleSystem::SetParticles(ParticleProp{ 2.f });
+	}
+
 	GraphicsSystem::Update(1.f);
+	ParticleSystem::Update(0.1f);
 }
 
 void MovingGuyScript::Draw()
@@ -92,12 +99,15 @@ void MovingGuyScript::Draw()
 	//AEGfxSetPosition(m_Guy.Position.x, m_Guy.Position.y);
 	//AEGfxTextureSet(NULL, 0, 0);
 	//AEGfxMeshDraw(m_Guy.Mesh, AE_GFX_MDM_TRIANGLES);
-	System::GraphicsSystem::Draw();
+	using namespace System;
+	GraphicsSystem::Draw();
+	ParticleSystem::Draw();
 }
 
 void MovingGuyScript::Terminate()
 {
 	using namespace System;
+	ParticleSystem::Terminate();
 	GraphicsSystem::Terminate();
 	EntitySystem::Terminate();
 }
