@@ -2,14 +2,20 @@
 
 namespace System
 {
+	constexpr u32 DEFAULT_COLOR = 0xFFFFFFFF; // White
+	constexpr u32 DEFAULT_SEGMENTS = 37; // Looks smooth even when enlarged without too many triangles
 
 	static ComponentMap* s_PositionComponents = nullptr;
 	static ComponentMap* s_RenderableComponents = nullptr;
+	static AEGfxTexture* s_DefaultTexture = nullptr; // For failed/missing textures
 
 	void GraphicsSystem::Init()
 	{
 		s_PositionComponents	= GetComponents<Position>();
 		s_RenderableComponents	= GetComponents<Renderable>();
+
+		s_DefaultTexture = AEGfxTextureLoad("Assets/MISSING_TEXTURE.png");
+		AE_ASSERT_MESG(s_DefaultTexture, "Failed to load default texture.");
 	}
 
 	void GraphicsSystem::Update(f32 _deltatime)
@@ -43,6 +49,7 @@ namespace System
 	{
 		s_PositionComponents = nullptr;
 		s_RenderableComponents = nullptr;
+		AEGfxTextureUnload(s_DefaultTexture);
 	}
 
 	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height)
@@ -72,10 +79,9 @@ namespace System
 		return _component;
 	}
 
-#define SEGMENTS 36
 	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(f32 _diameter)
 	{
-		return CreatePolygonMesh(SEGMENTS, _diameter);
+		return CreatePolygonMesh(DEFAULT_SEGMENTS, _diameter);
 	}
 
 	Renderable* GraphicsSystem::SetCircleMesh(Renderable* _component, f32 _diameter)
@@ -86,7 +92,6 @@ namespace System
 		return _component;
 	}
 
-#define PI 3.141592654f
 	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter)
 	{
 		f32 rad = _diameter * 0.5f;
@@ -127,7 +132,7 @@ namespace System
 	{
 		AEGfxTexture* texture = AEGfxTextureLoad(_path);
 		if (!texture)
-			return nullptr; // could load texture as a "failed texture png" instead?
+			texture = s_DefaultTexture; // could load texture as a "failed texture png" instead?
 		return texture;
 	}
 
