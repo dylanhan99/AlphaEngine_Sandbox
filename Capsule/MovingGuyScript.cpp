@@ -30,6 +30,7 @@ void MovingGuyScript::Init()
 	//EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
 	s_Entity2Rend = EntitySystem::GetComponent<Renderable>(s_Entity2);
 	s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(3, 600, 0xFF32AAAA);
+	GraphicsSystem::SetDrawMode(s_Entity2Rend, AE_GFX_MDM_LINES_STRIP);
 	//s_Entity2Rend->Mesh = GraphicsSystem::CreateQuadMesh(100, 400, 0xFF32AAAA, 100);
 
 	auto entity = EntitySystem::CreateEntity();
