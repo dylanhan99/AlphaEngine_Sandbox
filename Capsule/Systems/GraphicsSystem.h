@@ -27,7 +27,7 @@ namespace System
 		 * Pointer to new AEGfxVertexList. 
 		 * Typically assigned to RenderableComponent->Mesh.
 		***************************************************************************/
-		static AEGfxVertexList* CreateQuadMesh(f32 _width, f32 _height, u32 _color = DEFAULT_COLOR);
+		static AEGfxVertexList* CreateQuadMesh(f32 _width, f32 _height, u32 _color = DEFAULT_COLOR, f32 _rotation = 0.f);
 		
 		/*!*************************************************************************
 		 * \brief
@@ -43,7 +43,7 @@ namespace System
 		 * Pointer to component provided.
 		 * Nullptr if invalid component.
 		***************************************************************************/
-		static Renderable* SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color = DEFAULT_COLOR);
+		static Renderable* SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color = DEFAULT_COLOR, f32 _rotation = 0.f);
 		
 		/*!*************************************************************************
 		 * \brief
@@ -69,8 +69,8 @@ namespace System
 		***************************************************************************/
 		static Renderable* SetCircleMesh(Renderable* _component, f32 _diameter, u32 _color = DEFAULT_COLOR);
 
-		static AEGfxVertexList* CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color = DEFAULT_COLOR);
-		static Renderable* SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color = DEFAULT_COLOR);
+		static AEGfxVertexList* CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color = DEFAULT_COLOR, f32 _rotation = 0.f);
+		static Renderable* SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color = DEFAULT_COLOR, f32 _rotation = 0.f);
 
 		/*!*************************************************************************
 		 * \brief
@@ -98,7 +98,7 @@ namespace System
 		 * Pointer to component provided.
 		 * Nullptr if invalid component or failed texture.
 		***************************************************************************/
-		static Renderable* SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height);
+		static Renderable* SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height, f32 _rotation = 0.f);
 	
 		static Renderable* SetDrawMode(Renderable* _component, AEGfxMeshDrawMode _drawmode);
 	};

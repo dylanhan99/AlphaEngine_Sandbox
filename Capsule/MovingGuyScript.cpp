@@ -30,6 +30,7 @@ void MovingGuyScript::Init()
 	//EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
 	s_Entity2Rend = EntitySystem::GetComponent<Renderable>(s_Entity2);
 	s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(3, 600, 0xFF32AAAA);
+	//s_Entity2Rend->Mesh = GraphicsSystem::CreateQuadMesh(100, 400, 0xFF32AAAA, 100);
 
 	auto entity = EntitySystem::CreateEntity();
 	EntitySystem::AddComponent<Position>(entity, 1, 0);
@@ -59,13 +60,17 @@ void MovingGuyScript::Update()
 		s_PositionComponent->X += amt;
 	}
 
+	static f32 rot = 0;
 	if (AEInputCheckTriggered(AEVK_UP)) {
 		++segments;
+		rot += 20;
 		AEGfxMeshFree(s_Entity2Rend->Mesh);
-		s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(segments, 600);
+		s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(segments, 600, 0xFF32AAAA, rot);
+		//s_Entity2Rend->Mesh = GraphicsSystem::CreateQuadMesh(100, 400, 0xFF32AAAA, rot);
 	}
 	if (AEInputCheckTriggered(AEVK_DOWN)) {
 		--segments;
+		rot -= 20;
 		AEGfxMeshFree(s_Entity2Rend->Mesh);
 		s_Entity2Rend->Mesh = GraphicsSystem::CreatePolygonMesh(segments, 600);
 	}

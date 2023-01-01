@@ -50,30 +50,55 @@ namespace System
 		AEGfxTextureUnload(s_DefaultTexture);
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height, u32 _color)
+	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height, u32 _color, f32 _rotation)
 	{
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
 
-		AEGfxTriAdd(
-			-_width * 0.5f, -_height * 0.5f, _color, 0.0f, 1.0f,
-			 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
-			-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
+		if (!_rotation) {
+			AEGfxTriAdd(
+				-_width * 0.5f, -_height * 0.5f, _color, 0.0f, 1.0f,
+				 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
+				-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
 
-		AEGfxTriAdd(
-			 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
-			 _width * 0.5f,  _height * 0.5f, _color, 1.0f, 0.0f,
-			-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
+			AEGfxTriAdd(
+				 _width * 0.5f, -_height * 0.5f, _color, 1.0f, 1.0f,
+				 _width * 0.5f,  _height * 0.5f, _color, 1.0f, 0.0f,
+				-_width * 0.5f,  _height * 0.5f, _color, 0.0f, 0.0f);
+		} else {
+			//std::array<AEVec2, 6> arr = {
+			AEVec2 arr[6] = {
+				AEVec2{-_width * 0.5f, -_height * 0.5f},
+				AEVec2{ _width * 0.5f, -_height * 0.5f},
+				AEVec2{-_width * 0.5f,  _height * 0.5f},
 
+				AEVec2{ _width * 0.5f, -_height * 0.5f},
+				AEVec2{ _width * 0.5f,  _height * 0.5f},
+				AEVec2{-_width * 0.5f,  _height * 0.5f}
+			};
+			AEMtx33 rotmtx;
+			AEMtx33RotDeg(&rotmtx, _rotation);
+			AEMtx33MultVecArray(arr, &rotmtx, arr, 6);
+
+			AEGfxTriAdd(
+				arr[0].x, arr[0].y, _color, 0.0f, 1.0f,
+				arr[1].x, arr[1].y, _color, 1.0f, 1.0f,
+				arr[2].x, arr[2].y, _color, 0.0f, 0.0f);
+
+			AEGfxTriAdd(
+				arr[3].x, arr[3].y, _color, 1.0f, 1.0f,
+				arr[4].x, arr[4].y, _color, 1.0f, 0.0f,
+				arr[5].x, arr[5].y, _color, 0.0f, 0.0f);
+		}
 		mesh = AEGfxMeshEnd();
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color)
+	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
-		_component->Mesh = CreateQuadMesh(_width, _height, _color);
+		_component->Mesh = CreateQuadMesh(_width, _height, _color, _rotation);
 		return _component;
 	}
 
@@ -90,7 +115,7 @@ namespace System
 		return _component;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color)
+	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
 	{
 		f32 rad = _diameter * 0.5f;
 
@@ -100,7 +125,7 @@ namespace System
 		AEGfxMeshStart();
 
 		for (auto i = 0; i < _segments; ++i) {
-			f32 angle = 2.0f * PI * i / _segments + PI * 0.5f;
+			f32 angle = 2.0f * PI * i / _segments + PI * 0.5f + _rotation;
 			points.push_back({ rad * AECos(angle) , rad * AESin(angle) });
 			//points[i].x = rad * AECos(angle);
 			//points[i].y = rad * AESin(angle);
@@ -118,11 +143,11 @@ namespace System
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color)
+	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
-		_component->Mesh = CreatePolygonMesh(_segments, _diameter, _color);
+		_component->Mesh = CreatePolygonMesh(_segments, _diameter, _color, _rotation);
 		return _component;
 	}
 
@@ -134,12 +159,12 @@ namespace System
 		return texture;
 	}
 
-	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height)
+	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
 		_component->Texture = CreateTexture(_path);
-		_component->Mesh = CreateQuadMesh(_width, _height);
+		_component->Mesh = CreateQuadMesh(_width, _height, DEFAULT_COLOR, _rotation);
 		//if (!_component->Texture || !_component->Mesh)
 		//	return nullptr;
 		return _component;
