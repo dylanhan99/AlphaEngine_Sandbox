@@ -1,19 +1,22 @@
 #include "ParticleSystem.h"
 #include "GraphicsSystem.h"
 #include "../Particle.h"
+#include "AEsystem.h"
 
 namespace System
 {
 	constexpr u32 PARTICLES_MAX = 10000;
+	using ParticlePool = std::array<Particle*, PARTICLES_MAX>;
+	using ParticleList = std::vector<Particle*>;
 	
-	static std::array<Particle*, PARTICLES_MAX>* s_ParticlePool = nullptr;
-	static std::vector<Particle*>* s_ActiveParticles = nullptr;
+	static ParticlePool* s_ParticlePool = nullptr;
+	static ParticleList* s_ActiveParticles = nullptr;
 	static u32 s_LastUsedParticle = 0;
 
 	void ParticleSystem::Init()
 	{
-		s_ParticlePool = new std::array<Particle*, PARTICLES_MAX>();
-		s_ActiveParticles = new std::vector<Particle*>();
+		s_ParticlePool = new ParticlePool();
+		s_ActiveParticles = new ParticleList();
 		for (auto it = s_ParticlePool->begin(); it != s_ParticlePool->end(); ++it) {
 			*it = new Particle();
 		}
@@ -87,8 +90,8 @@ namespace System
 		auto availableParticle = s_ParticlePool->at(FindUnusedParticle());
 		availableParticle->Life = _prop.Life;
 		s32 x, y; AEInputGetCursorPosition(&x, &y);
-		availableParticle->Position.x = 0;
-		availableParticle->Position.y = 0;
+		availableParticle->Position.x = x - 800 * 0.5f;
+		availableParticle->Position.y = -y + 600 * 0.5f;
 		availableParticle->Mesh = GraphicsSystem::CreateQuadMesh(100, 100, 0xffffffff);
 		s_ActiveParticles->push_back(availableParticle);
 	}
