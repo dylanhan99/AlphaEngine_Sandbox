@@ -15,14 +15,14 @@ namespace System
 		return GetComponentMapArray()->at(GetComponentTypeID<T>());
 	}
 
-	class System
+	class Manager
 	{
 		virtual void Init() = 0;
 		virtual void Update(f32 _deltatime) = 0;
 		virtual void Terminate() = 0;
 	};
 
-	class EntitySystem
+	class EntityManager : public Manager
 	{
 	private:
 		

@@ -92,7 +92,7 @@ namespace System
 		s32 x, y; AEInputGetCursorPosition(&x, &y);
 		availableParticle->Position.x = x - 800 * 0.5f;
 		availableParticle->Position.y = -y + 600 * 0.5f;
-		availableParticle->Mesh = GraphicsSystem::CreateQuadMesh(100, 100, 0xffffffff);
+		availableParticle->Mesh = GraphicsManager::CreateQuadMesh(100, 100, 0xffffffff);
 		s_ActiveParticles->push_back(availableParticle);
 	}
 

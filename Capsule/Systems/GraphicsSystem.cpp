@@ -7,7 +7,7 @@ namespace System
 	static ComponentMap* s_RenderableComponents = nullptr;
 	static AEGfxTexture* s_DefaultTexture = nullptr; // For failed/missing textures
 
-	void GraphicsSystem::Init()
+	void GraphicsManager::Init()
 	{
 		s_PositionComponents	= GetComponents<Position>();
 		s_RenderableComponents	= GetComponents<Renderable>();
@@ -16,12 +16,12 @@ namespace System
 		AE_ASSERT_MESG(s_DefaultTexture, "Failed to load default texture.");
 	}
 
-	void GraphicsSystem::Update(f32 _deltatime)
+	void GraphicsManager::Update(f32 _deltatime)
 	{
 		
 	}
 
-	void GraphicsSystem::Draw()
+	void GraphicsManager::Draw()
 	{
 		for (auto it = s_RenderableComponents->begin(); it != s_RenderableComponents->end(); ++it) {
 			auto positionIterator = s_PositionComponents->find(it->second->m_EntityID);
@@ -43,14 +43,14 @@ namespace System
 		}
 	}
 
-	void GraphicsSystem::Terminate()
+	void GraphicsManager::Terminate()
 	{
 		s_PositionComponents = nullptr;
 		s_RenderableComponents = nullptr;
 		AEGfxTextureUnload(s_DefaultTexture);
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateQuadMesh(f32 _width, f32 _height, u32 _color, f32 _rotation)
+	AEGfxVertexList* GraphicsManager::CreateQuadMesh(f32 _width, f32 _height, u32 _color, f32 _rotation)
 	{
 		AEGfxVertexList* mesh = nullptr;
 		AEGfxMeshStart();
@@ -94,7 +94,7 @@ namespace System
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color, f32 _rotation)
+	Renderable* GraphicsManager::SetQuadMesh(Renderable* _component, f32 _width, f32 _height, u32 _color, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
@@ -102,12 +102,12 @@ namespace System
 		return _component;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreateCircleMesh(f32 _diameter, u32 _color)
+	AEGfxVertexList* GraphicsManager::CreateCircleMesh(f32 _diameter, u32 _color)
 	{
 		return CreatePolygonMesh(DEFAULT_SEGMENTS, _diameter, _color);
 	}
 
-	Renderable* GraphicsSystem::SetCircleMesh(Renderable* _component, f32 _diameter, u32 _color)
+	Renderable* GraphicsManager::SetCircleMesh(Renderable* _component, f32 _diameter, u32 _color)
 	{
 		if (!_component)
 			return nullptr;
@@ -115,7 +115,7 @@ namespace System
 		return _component;
 	}
 
-	AEGfxVertexList* GraphicsSystem::CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
+	AEGfxVertexList* GraphicsManager::CreatePolygonMesh(u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
 	{
 		f32 rad = _diameter * 0.5f;
 
@@ -143,7 +143,7 @@ namespace System
 		return mesh;
 	}
 
-	Renderable* GraphicsSystem::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
+	Renderable* GraphicsManager::SetPolygonMesh(Renderable* _component, u32 _segments, f32 _diameter, u32 _color, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
@@ -151,7 +151,7 @@ namespace System
 		return _component;
 	}
 
-	AEGfxTexture* GraphicsSystem::CreateTexture(const char* _path)
+	AEGfxTexture* GraphicsManager::CreateTexture(const char* _path)
 	{
 		AEGfxTexture* texture = AEGfxTextureLoad(_path);
 		if (!texture)
@@ -159,7 +159,7 @@ namespace System
 		return texture;
 	}
 
-	Renderable* GraphicsSystem::SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height, f32 _rotation)
+	Renderable* GraphicsManager::SetTexture(Renderable* _component, const char* _path, f32 _width, f32 _height, f32 _rotation)
 	{
 		if (!_component)
 			return nullptr;
@@ -170,7 +170,7 @@ namespace System
 		return _component;
 	}
 
-	Renderable* GraphicsSystem::SetDrawMode(Renderable* _component, AEGfxMeshDrawMode _drawmode)
+	Renderable* GraphicsManager::SetDrawMode(Renderable* _component, AEGfxMeshDrawMode _drawmode)
 	{
 		if (!_component)
 			return nullptr;

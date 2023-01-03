@@ -1,11 +1,11 @@
 #pragma once
-#include "Systems.h"
+#include "System.h"
 #include "../Constants.h"
 
 namespace System
 {
 
-	class GraphicsSystem : public System
+	class GraphicsManager : public Manager
 	{
 	private:
 

@@ -16,7 +16,7 @@
     <ClCompile Include="MovingGuyScript.cpp" />
     <ClCompile Include="Systems\GraphicsSystem.cpp" />
     <ClCompile Include="Systems\ParticleSystem.cpp" />
-    <ClCompile Include="Systems\Systems.cpp" />
+    <ClCompile Include="Systems\System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
@@ -25,7 +25,7 @@
     <ClInclude Include="Systems\GraphicsSystem.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Systems\ParticleSystem.h" />
-    <ClInclude Include="Systems\Systems.h" />
+    <ClInclude Include="Systems\System.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

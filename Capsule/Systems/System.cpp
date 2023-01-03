@@ -1,11 +1,9 @@
-#include "Systems.h"
+#include "System.h"
 #include <algorithm>
 #include "../Components.h"
 
 namespace System
 {
-
-	static EntitySystem* s_EntityManager = nullptr;
 
 	static EntityMap* s_EntityMap = nullptr;
 	static EntityList* s_AvailableEntities = nullptr;
@@ -16,10 +14,8 @@ namespace System
 		return s_ComponentMapsArray;
 	}
 
-	void EntitySystem::Init()
+	void EntityManager::Init()
 	{
-		s_EntityManager = new EntitySystem();
-
 		s_EntityMap = new EntityMap();
 		s_AvailableEntities = new EntityList({ nullptr });
 		s_ComponentMapsArray = new ComponentMapArray({ nullptr });
@@ -30,7 +26,7 @@ namespace System
 			*it = new ComponentMap();
 	}
 
-	void EntitySystem::Terminate()
+	void EntityManager::Terminate()
 	{
 		// When there is a component pool, dont forget to delete pool and component map from here.
 		// Then DestroyEntity() will jkust disable the component rather than delete it.
@@ -41,11 +37,9 @@ namespace System
 		}}
 		for (auto it = s_AvailableEntities->begin(); it != s_AvailableEntities->end(); ++it)
 			delete *it;
-
-		delete s_EntityManager;
 	}
 
-	EntityRef EntitySystem::CreateEntity()
+	EntityRef EntityManager::CreateEntity()
 	{
 		EntityRef entity = nullptr;
 		if (s_AvailableEntities->size() > 0) {
@@ -59,7 +53,7 @@ namespace System
 		return entity;
 	}
 
-	void EntitySystem::DestroyEntity(const EntityID& _id)
+	void EntityManager::DestroyEntity(const EntityID& _id)
 	{
 		auto entity = s_EntityMap->at(_id);
 		for (auto component : entity->ComponentList)
@@ -69,17 +63,17 @@ namespace System
 		GetAvailableEntities()->push_back(entity);
 	}
 	
-	EntityList* EntitySystem::GetAvailableEntities()
+	EntityList* EntityManager::GetAvailableEntities()
 	{
 		return s_AvailableEntities;
 	}
 
-	EntityMap* EntitySystem::GetEntities()
+	EntityMap* EntityManager::GetEntities()
 	{
 		return s_EntityMap;
 	}
 
-	EntityRef EntitySystem::GetEntity(EntityID& _id)
+	EntityRef EntityManager::GetEntity(EntityID& _id)
 	{
 		//if (_id < 0 || _id >= s_EntityMap.size())
 		//	return nullptr;

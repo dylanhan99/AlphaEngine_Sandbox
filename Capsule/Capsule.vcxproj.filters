@@ -21,7 +21,7 @@
     <ClCompile Include="MovingGuyScript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\Systems.cpp">
+    <ClCompile Include="Systems\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components.cpp">
@@ -41,7 +41,7 @@
     <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\Systems.h">
+    <ClInclude Include="Systems\System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Systems\GraphicsSystem.h">

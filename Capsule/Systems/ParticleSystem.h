@@ -1,15 +1,30 @@
 #pragma once
-#include "Systems.h"
+#include "System.h"
 
 namespace System
 {
 
 	struct ParticleProp {
-		f32 Life = 2;
+		u32 NumberOfParticles	= 1;
+		f32 Life				= 2;
+		f32 LifeRange			= 0;
+
+		bool SpawnAtDistance	= false; // If true, SpawnRange will be used as diameter
+		u32 SpawnX				= 0;
+		u32 SpawnXRange			= 0;
+		u32 SpawnY				= 0;
+		u32 SpawnYRange			= 0;
+
+		AEVec2 Direction		= { 0, 0 };
+
+	};
+
+	class ParticleManager : public Manager
+	{
 
 	};
 	
-	class ParticleSystem : public System
+	class ParticleSystem// : public System
 	{
 	private:
 	public:
