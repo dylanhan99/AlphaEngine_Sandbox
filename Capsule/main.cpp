@@ -1,5 +1,8 @@
 #include "AEEngine.h"
 #include "MovingGuyScript.h"
+#include "ProceduralGeneration.h"
+
+#define PROCEDURAL 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -14,7 +17,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int m_GameRunning = 1;
 
+#ifdef PROCEDURAL
+
+#else
 	MovingGuyScript script1;
+#endif // PROCEDURAL
 
 	// Variable declaration end
 	///////////////////////////
@@ -33,16 +40,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Initialization end
 	/////////////////////
 
+#ifdef PROCEDURAL
+	ProceduralGeneration::Init();
+#else
 	script1.Init();
+#endif // PROCEDURAL
+
 
 	while (m_GameRunning)
 	{
 		AESysFrameStart();
 		AEInputUpdate();
 
+#ifdef PROCEDURAL
+		ProceduralGeneration::Update();
+		ProceduralGeneration::Draw();
+#else
 		script1.Update();
-
 		script1.Draw();
+#endif // PROCEDURAL
+
 
 		AESysFrameEnd();
 
@@ -50,8 +67,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			m_GameRunning = 0;
 	}
-
+#ifdef PROCEDURAL
+	ProceduralGeneration::Terminate();
+#else
 	script1.Terminate();
+#endif // PROCEDURAL
 
 	AESysExit();
 }

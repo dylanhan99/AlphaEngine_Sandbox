@@ -3,7 +3,7 @@
 //#include "Systems/Systems.h"
 //#include "Components.h"
 #include "Systems/GraphicsSystem.h"
-#include "Systems/ParticleSystem.h"
+//#include "Systems/ParticleSystem.h"
 
 struct Guy {
 	AEVec2 Position;
@@ -24,6 +24,7 @@ void MovingGuyScript::Init()
 	using namespace System;
 	EntityManager::Init();
 	GraphicsManager::Init();
+	//ParticleManager::Init();
 	//ParticleSystem::Init();
 
 	s_Entity2 = EntityManager::CreateEntity();
@@ -32,7 +33,7 @@ void MovingGuyScript::Init()
 	//EntitySystem::GetComponent<Renderable>(entity2)->Mesh = GraphicsSystem::CreateCircleMesh(600);
 	s_Entity2Rend = EntityManager::GetComponent<Renderable>(s_Entity2);
 	s_Entity2Rend->Mesh = GraphicsManager::CreatePolygonMesh(3, 600, 0xFF32AAAA);
-	GraphicsManager::SetDrawMode(s_Entity2Rend, AE_GFX_MDM_LINES_STRIP);
+	GraphicsManager::SetDrawMode(s_Entity2Rend, AE_GFX_MDM_TRIANGLES);
 	//s_Entity2Rend->Mesh = GraphicsSystem::CreateQuadMesh(100, 400, 0xFF32AAAA, 100);
 
 	auto entity = EntityManager::CreateEntity();
@@ -41,6 +42,9 @@ void MovingGuyScript::Init()
 	auto rend = EntityManager::AddComponent<Renderable>(entity);
 	s_PositionComponent = EntityManager::GetComponent<Position>(entity);
 	GraphicsManager::SetTexture(rend, "Assets/PlanetTexture.png", 100, 100);
+
+	//ParticleManager::AddParticleSystem<Smoke_ParticleSystem>();
+	//auto stuff = ParticleManager::GetParticleSystemList();
 }
 
 void MovingGuyScript::Update()
@@ -88,6 +92,7 @@ void MovingGuyScript::Update()
 	}
 
 	GraphicsManager::Update(1.f);
+	//ParticleManager::Update(0.1f);
 	//ParticleSystem::Update(0.1f);
 }
 
@@ -101,6 +106,7 @@ void MovingGuyScript::Draw()
 	//AEGfxMeshDraw(m_Guy.Mesh, AE_GFX_MDM_TRIANGLES);
 	using namespace System;
 	GraphicsManager::Draw();
+	//ParticleManager::Draw();
 	//ParticleSystem::Draw();
 }
 
@@ -108,6 +114,7 @@ void MovingGuyScript::Terminate()
 {
 	using namespace System;
 	//ParticleSystem::Terminate();
+	//ParticleManager::Terminate();
 	GraphicsManager::Terminate();
 	EntityManager::Terminate();
 }
