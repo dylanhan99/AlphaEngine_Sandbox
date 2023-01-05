@@ -64,6 +64,27 @@ void ProceduralGeneration::Init()
 		GraphicsManager::SetDrawMode(renderable, AE_GFX_MDM_TRIANGLES);
 		++i;
 	}
+
+	auto entity = EntityManager::CreateEntity();
+	EntityManager::AddComponent<Position>(entity, 0, 0);
+	auto renderable = EntityManager::AddComponent<Renderable>(entity);
+	f32 min = -200;
+	f32 max = 200;
+	u32 col = 0xFFFFFFFF;
+	AEGfxMeshStart();
+	for (int i = 0; i < 10; ++i) {
+		f32 x = min + ((max - min) * AERandFloat());
+		f32 y = min + ((max - min) * AERandFloat());
+		AEGfxTriAdd(
+			-x * 0.5f, -y * 0.5f, col - 100000 * i, 0.0f, 1.0f,
+			 x * 0.5f, -y * 0.5f, col - 100000 * i, 1.0f, 1.0f,
+			-x * 0.5f,  y * 0.5f, col - 100000 * i, 0.0f, 0.0f);
+
+	}
+	renderable->Mesh = AEGfxMeshEnd();
+
+	AEGfxMeshFree(renderable->Mesh);
+
 }
 
 void ProceduralGeneration::Update()
