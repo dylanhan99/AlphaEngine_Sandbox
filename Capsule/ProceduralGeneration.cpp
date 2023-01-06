@@ -6,7 +6,7 @@
 #include <cmath>
 
 using namespace System;
-static u32 rad = 5;
+static u32 rad = 2;
 void ProceduralGeneration::Init()
 {
 	EntityManager::Init();
@@ -14,7 +14,7 @@ void ProceduralGeneration::Init()
 
 	//u32 rad = 20;
 	u32 diameter = rad * 2;
-	u32 gridSize = 200;
+	u32 gridSize = 100;
 	for (u32 i = 0; i < gridSize; ++i) {
 		for (u32 j = 0; j < gridSize; ++j) {
 			// init circles
