@@ -23,7 +23,10 @@ namespace System
 
 	void GraphicsManager::Draw()
 	{
+		static EntityMap* s_Entities = EntityManager::GetEntities();
 		for (auto it = s_RenderableComponents->begin(); it != s_RenderableComponents->end(); ++it) {
+			if (!s_Entities->at(it->second->m_EntityID)->Active)
+				continue;
 			auto positionIterator = s_PositionComponents->find(it->second->m_EntityID);
 			if (positionIterator == s_PositionComponents->end())
 				continue;

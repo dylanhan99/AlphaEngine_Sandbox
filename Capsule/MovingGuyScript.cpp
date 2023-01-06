@@ -19,6 +19,9 @@ static Renderable* s_Entity2Rend = NULL;
 
 static Position* s_PositionComponent = NULL;
 
+static EntityRef s_EntityLIGHT = NULL;
+static Position* s_LightPos = NULL;
+
 void MovingGuyScript::Init()
 {
 	using namespace System;
@@ -45,6 +48,10 @@ void MovingGuyScript::Init()
 
 	//ParticleManager::AddParticleSystem<Smoke_ParticleSystem>();
 	//auto stuff = ParticleManager::GetParticleSystemList();
+	s_EntityLIGHT = EntityManager::CreateEntity();
+	s_LightPos = EntityManager::AddComponent<Position>(s_EntityLIGHT, 0, 0);
+	auto lightRend = EntityManager::AddComponent<Renderable>(s_EntityLIGHT);
+	GraphicsManager::SetTexture(lightRend, "Assets/LIGHT.png", 75, 75);
 }
 
 void MovingGuyScript::Update()
@@ -90,6 +97,12 @@ void MovingGuyScript::Update()
 	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
 		//ParticleSystem::SetParticles(ParticleProp{ 2.f });
 	}
+
+	static s32 mousex = 0;
+	static s32 mousey = 0;
+	AEInputGetCursorPosition(&mousex, &mousey);
+	s_LightPos->X = mousex - 400;
+	s_LightPos->Y = mousey * -1 + 300;
 
 	GraphicsManager::Update(1.f);
 	//ParticleManager::Update(0.1f);

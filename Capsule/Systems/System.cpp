@@ -17,8 +17,8 @@ namespace System
 	void EntityManager::Init()
 	{
 		s_EntityMap = new EntityMap();
-		s_AvailableEntities = new EntityList({ nullptr });
-		s_ComponentMapsArray = new ComponentMapArray({ nullptr });
+		s_AvailableEntities = new EntityList({});
+		s_ComponentMapsArray = new ComponentMapArray({});
 
 		for (u32 i = 0; i < MAX_POOL; ++i)
 			s_AvailableEntities->push_back(new Entity());

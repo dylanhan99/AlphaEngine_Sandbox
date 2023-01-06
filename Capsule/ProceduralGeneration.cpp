@@ -6,91 +6,77 @@
 #include <cmath>
 
 using namespace System;
-
+static u32 rad = 5;
 void ProceduralGeneration::Init()
 {
 	EntityManager::Init();
 	GraphicsManager::Init();
 
-	AEVec2 circlePos = { 0, 0 };
-	f32 spawnRadius = 300;
-	f32 spawnDiameter = spawnRadius * 2;
-	u32 numToSpawn = 5;
-	f32 sizeSmallest = 50;
-	f32 sizeLargest = 100;
-
-	struct circ {
-		f32 X, Y;
-		f32 size;
-	};
-
-	std::vector<circ> circVector;
-
-	srand((unsigned)time(NULL));
-	for (u32 i = 0; i < numToSpawn; ) {
-		// random x,y values within circle range
-		// random size - pick 2 corners of the new quad
-			// if overlap with any others, dont ++i, 
-			// delete quad and redo
-			// if no overlap, ++i
-
-		circ newCirc = {
-			0 - spawnRadius + (spawnDiameter * AERandFloat()), // x
-			0 - spawnRadius + (spawnDiameter * AERandFloat()), // y
-			sizeSmallest + (sizeLargest - sizeSmallest) * AERandFloat() // size
-		};
-
-		auto entity = EntityManager::CreateEntity();
-		if (!entity)
-			continue;
-		
-		if (!circVector.empty()) {
-			bool overlap = false;
-			for (u32 j = 0; j < circVector.size(); ++j) {
-				auto comparison = circVector[j];
-				f32 totalRadius = newCirc.size / 2 + comparison.size / 2;
-				f32 distance = sqrt(pow(comparison.X - newCirc.X, 2) + pow(comparison.Y - newCirc.Y, 2));
-				if (distance < totalRadius)
-					overlap = true;
-			}
-			if (overlap)
-				continue;
+	//u32 rad = 20;
+	u32 diameter = rad * 2;
+	u32 gridSize = 200;
+	for (u32 i = 0; i < gridSize; ++i) {
+		for (u32 j = 0; j < gridSize; ++j) {
+			// init circles
+			auto entity = EntityManager::CreateEntity();
+			f32 x = (float)(0 - 400) + (float)(i * diameter);
+			f32 y = (float)(0 - 300) + (float)(j * diameter);
+			EntityManager::AddComponent<Position>(entity, x, y);
+			auto renderable = EntityManager::AddComponent<Renderable>(entity);
+			//GraphicsManager::SetCircleMesh(renderable, diameter);
+			GraphicsManager::SetQuadMesh(renderable, diameter, diameter);
 		}
-
-		EntityManager::AddComponent<Position>(entity, newCirc.X, newCirc.Y);
-		auto renderable = EntityManager::AddComponent<Renderable>(entity);
-		//GraphicsManager::SetQuadMesh(renderable, size, size);
-		GraphicsManager::SetCircleMesh(renderable, newCirc.size);
-		GraphicsManager::SetDrawMode(renderable, AE_GFX_MDM_TRIANGLES);
-		++i;
 	}
-
-	auto entity = EntityManager::CreateEntity();
-	EntityManager::AddComponent<Position>(entity, 0, 0);
-	auto renderable = EntityManager::AddComponent<Renderable>(entity);
-	f32 min = -200;
-	f32 max = 200;
-	u32 col = 0xFFFFFFFF;
-	AEGfxMeshStart();
-	for (int i = 0; i < 10; ++i) {
-		f32 x = min + ((max - min) * AERandFloat());
-		f32 y = min + ((max - min) * AERandFloat());
-		AEGfxTriAdd(
-			-x * 0.5f, -y * 0.5f, col - 100000 * i, 0.0f, 1.0f,
-			 x * 0.5f, -y * 0.5f, col - 100000 * i, 1.0f, 1.0f,
-			-x * 0.5f,  y * 0.5f, col - 100000 * i, 0.0f, 0.0f);
-
+	{
+		//auto entity = EntityManager::CreateEntity();
+		//EntityManager::AddComponent<Position>(entity, 0, 0);
+		//auto renderable = EntityManager::AddComponent<Renderable>(entity);
+		//f32 min = -200;
+		//f32 max = 200;
+		//u32 col = 0xFFFFFFFF;
+		//AEGfxMeshStart();
+		//for (int i = 0; i < 10; ++i) {
+		//	f32 x = min + ((max - min) * AERandFloat());
+		//	f32 y = min + ((max - min) * AERandFloat());
+		//	AEGfxTriAdd(
+		//		-x * 0.5f, -y * 0.5f, col - 100000 * i, 0.0f, 1.0f,
+		//		 x * 0.5f, -y * 0.5f, col - 100000 * i, 1.0f, 1.0f,
+		//		-x * 0.5f,  y * 0.5f, col - 100000 * i, 0.0f, 0.0f);
+		//
+		//}
+		//renderable->Mesh = AEGfxMeshEnd();
+		//
+		//AEGfxMeshFree(renderable->Mesh);
 	}
-	renderable->Mesh = AEGfxMeshEnd();
-
-	AEGfxMeshFree(renderable->Mesh);
-
 }
 
 void ProceduralGeneration::Update()
 {
 	EntityManager::Update(1.f);
 	GraphicsManager::Update(1.f);
+
+	static EntityMap* s_Entities = EntityManager::GetEntities();
+	static s32 mouseX = 0;
+	static s32 mouseY = 0;
+	static u32 mouseRad = 20;
+	static u32 totalRad = rad + mouseRad;
+	AEInputGetCursorPosition(&mouseX, &mouseY);
+	mouseX -= 400;
+	mouseY = mouseY * -1 + 300;
+
+	std::cout << mouseX << ", " << mouseY << std::endl;
+	static ComponentMap* s_PositionComponents = GetComponents<Position>();
+	for (auto it = s_PositionComponents->begin(); it != s_PositionComponents->end(); ++it) {
+		auto position = (Position*)it->second;
+		// if dist from mouse to pos is < radius, collide, draw.
+		// else dont draw
+		f32 dist = sqrt(pow((mouseX - position->X), 2) + pow(mouseY - position->Y, 2));
+		if (dist <= totalRad) {
+			s_Entities->at(position->m_EntityID)->Active = true;
+		}
+		else
+			s_Entities->at(position->m_EntityID)->Active = false;
+	}
 }
 
 void ProceduralGeneration::Draw()
